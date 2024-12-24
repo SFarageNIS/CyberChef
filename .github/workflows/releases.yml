@@ -7,9 +7,6 @@ on:
     - 'v*'
 
 env:
-  REGISTRY: ghcr.io
-  REGISTRY_USER: ${{ github.actor }}
-  REGISTRY_PASSWORD: ${{ github.token }}
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
@@ -44,16 +41,6 @@ jobs:
         sudo apt-get install xvfb
         xvfb-run --server-args="-screen 0 1200x800x24" npx grunt testui
 
-    - name: Image Metadata
-      id: image-metadata
-      uses: docker/metadata-action@v4
-      with:
-        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-        tags: |
-          type=semver,pattern={{major}}
-          type=semver,pattern={{major}}.{{minor}}
-          type=semver,pattern={{version}}
-
     - name: Production Image Build
       id: build-image
       uses: redhat-actions/buildah-build@v2
@@ -77,17 +64,5 @@ jobs:
         tag: ${{ github.ref }}
         overwrite: true
         file_glob: true
-        body: "See the [CHANGELOG](https://github.com/gchq/CyberChef/blob/master/CHANGELOG.md) and [commit messages](https://github.com/gchq/CyberChef/commits/master) for details."
+        body: "See the [CHANGELOG](https://github.com/SFarageNIS/CyberChef/blob/master/CHANGELOG.md) and [commit messages](https://github.com/SFarageNIS/CyberChef/commits/master) for details."
 
-    - name: Publish to NPM
-      uses: JS-DevTools/npm-publish@v1
-      with:
-        token: ${{ secrets.NPM_TOKEN }}
-
-    - name: Publish to GHCR
-      uses: redhat-actions/push-to-registry@v2
-      with:
-        tags: ${{ steps.build-image.outputs.tags }}
-        registry: ${{ env.REGISTRY }}
-        username: ${{ env.REGISTRY_USER }}
-        password: ${{ env.REGISTRY_PASSWORD }}
