@@ -31,9 +31,9 @@ class BLAKE2b extends Operation {
         this.outputType = "string";
         this.args = [
             {
-                "name": "Size",
-                "type": "option",
-                "value": ["512", "384", "256", "160", "128"]
+                "type": "number",
+                "name": "Output Size (1-64 bytes)",
+                "value": 256
             }, {
                 "name": "Output Encoding",
                 "type": "option",
@@ -54,7 +54,13 @@ class BLAKE2b extends Operation {
      */
     run(input, args) {
         const [outSize, outFormat] = args;
+        const outputLength = args[0];
         let key = Utils.convertToByteArray(args[2].string || "", args[2].option);
+
+        if (outputLength % 8 !== 0) {
+            throw new OperationError("Invalid length! Valid values: 8, 16, ..., 512");
+        }
+
         if (key.length === 0) {
             key = null;
         } else if (key.length > 64) {

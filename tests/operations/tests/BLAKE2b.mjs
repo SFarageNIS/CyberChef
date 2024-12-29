@@ -45,6 +45,33 @@ TestRegister.addTests([
         ]
     },
     {
+        name: "BLAKE2b: 32 - Hello World",
+        input: "Hello World",
+        expectedOutput: "6ecb6651",
+        recipeConfig: [
+            { "op": "BLAKE2b",
+                "args": ["32", "Hex", {string: "", option: "UTF8"}] }
+        ]
+    },
+    {
+        name: "BLAKE2b: 31 - Invalid Hello World",
+        input: "Hello World",
+        expectedOutput: "Invalid length! Valid values: 8, 16, ..., 512",
+        recipeConfig: [
+            { "op": "BLAKE2b",
+                "args": ["31", "Hex", {string: "", option: "UTF8"}] }
+        ]
+    },
+    {
+        name: "BLAKE2b: 31 - Invalid Hello World with key",
+        input: "Hello World",
+        expectedOutput: "Invalid length! Valid values: 8, 16, ..., 512",
+        recipeConfig: [
+            { "op": "BLAKE2b",
+                "args": ["31", "Hex", {string: "valid_key", option: "UTF8"}] }
+        ]
+    },
+    {
         name: "BLAKE2b: Key Test",
         input: "message data",
         expectedOutput: "3d363ff7401e02026f4a4687d4863ced",
