@@ -61,8 +61,9 @@ function transformArgs(opArgsList, newArgs) {
                         argument.option = newArgs[key].option;
                     }
                 } else if (argument.type === "editableOption") {
-                    // takes key: "option", key: {name, val: "string"}, key: {name, val: [...]}
-                    argument.value = typeof newArgs[key] === "string" ? newArgs[key]: newArgs[key].value;
+                    // takes key: "option", key: 123, key: {name, val: "string"}, key: {name, val: [...]}
+                    const isOptionObject = typeof newArgs[key] === "object" && newArgs[key] !== null;
+                    argument.value = isOptionObject ? newArgs[key].value : String(newArgs[key]);
                 } else {
                     argument.value = newArgs[key];
                 }

@@ -183,5 +183,137 @@ TestRegister.addTests([
                 args: [5, 1.5, "hello", "", { "option": "Option A", "string": "test" }, "Option 1", ""]
             }
         ]
+    },
+    {
+        name: "Automated Validation: Numeric Editable Option valid preset",
+        input: "test",
+        expectedOutput: "Success",
+        recipeConfig: [
+            {
+                op: "Automated Validation Test Op",
+                args: [5, 1.5, "hello", "", { "option": "Option A", "string": "test" }, "Option 1", "Option 1", "16"]
+            }
+        ]
+    },
+    {
+        name: "Automated Validation: Numeric Editable Option valid typed value",
+        input: "test",
+        expectedOutput: "Success",
+        recipeConfig: [
+            {
+                op: "Automated Validation Test Op",
+                args: [5, 1.5, "hello", "", { "option": "Option A", "string": "test" }, "Option 1", "Option 1", "40"]
+            }
+        ]
+    },
+    {
+        name: "Automated Validation: Numeric Editable Option valid number",
+        input: "test",
+        expectedOutput: "Success",
+        recipeConfig: [
+            {
+                op: "Automated Validation Test Op",
+                args: [5, 1.5, "hello", "", { "option": "Option A", "string": "test" }, "Option 1", "Option 1", 48]
+            }
+        ]
+    },
+    {
+        name: "Automated Validation: Numeric Editable Option surrounding whitespace",
+        input: "test",
+        expectedOutput: "Success",
+        recipeConfig: [
+            {
+                op: "Automated Validation Test Op",
+                args: [5, 1.5, "hello", "", { "option": "Option A", "string": "test" }, "Option 1", "Option 1", " 32 "]
+            }
+        ]
+    },
+    {
+        name: "Automated Validation: Numeric Editable Option under min limit",
+        input: "test",
+        expectedOutput: "Numeric Editable Option must be greater than or equal to 8.",
+        recipeConfig: [
+            {
+                op: "Automated Validation Test Op",
+                args: [5, 1.5, "hello", "", { "option": "Option A", "string": "test" }, "Option 1", "Option 1", "0"]
+            }
+        ]
+    },
+    {
+        name: "Automated Validation: Numeric Editable Option over max limit",
+        input: "test",
+        expectedOutput: "Numeric Editable Option must be less than or equal to 64.",
+        recipeConfig: [
+            {
+                op: "Automated Validation Test Op",
+                args: [5, 1.5, "hello", "", { "option": "Option A", "string": "test" }, "Option 1", "Option 1", "72"]
+            }
+        ]
+    },
+    {
+        name: "Automated Validation: Numeric Editable Option not a multiple of step",
+        input: "test",
+        expectedOutput: "Numeric Editable Option must be a multiple of 8.",
+        recipeConfig: [
+            {
+                op: "Automated Validation Test Op",
+                args: [5, 1.5, "hello", "", { "option": "Option A", "string": "test" }, "Option 1", "Option 1", "12"]
+            }
+        ]
+    },
+    {
+        name: "Automated Validation: Numeric Editable Option not an integer",
+        input: "test",
+        expectedOutput: "Numeric Editable Option must be an integer.",
+        recipeConfig: [
+            {
+                op: "Automated Validation Test Op",
+                args: [5, 1.5, "hello", "", { "option": "Option A", "string": "test" }, "Option 1", "Option 1", "16.0"]
+            }
+        ]
+    },
+    {
+        name: "Automated Validation: Numeric Editable Option hexadecimal notation",
+        input: "test",
+        expectedOutput: "Numeric Editable Option must be a number.",
+        recipeConfig: [
+            {
+                op: "Automated Validation Test Op",
+                args: [5, 1.5, "hello", "", { "option": "Option A", "string": "test" }, "Option 1", "Option 1", "0x10"]
+            }
+        ]
+    },
+    {
+        name: "Automated Validation: Numeric Editable Option exponent notation",
+        input: "test",
+        expectedOutput: "Numeric Editable Option must be a number.",
+        recipeConfig: [
+            {
+                op: "Automated Validation Test Op",
+                args: [5, 1.5, "hello", "", { "option": "Option A", "string": "test" }, "Option 1", "Option 1", "1.6e1"]
+            }
+        ]
+    },
+    {
+        name: "Automated Validation: Numeric Editable Option not a number",
+        input: "test",
+        expectedOutput: "Numeric Editable Option must be a number.",
+        recipeConfig: [
+            {
+                op: "Automated Validation Test Op",
+                args: [5, 1.5, "hello", "", { "option": "Option A", "string": "test" }, "Option 1", "Option 1", "abc"]
+            }
+        ]
+    },
+    {
+        name: "Automated Validation: Numeric Editable Option empty",
+        input: "test",
+        expectedOutput: "Numeric Editable Option cannot be empty.",
+        recipeConfig: [
+            {
+                op: "Automated Validation Test Op",
+                args: [5, 1.5, "hello", "", { "option": "Option A", "string": "test" }, "Option 1", "Option 1", ""]
+            }
+        ]
     }
 ]);

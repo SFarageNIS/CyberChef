@@ -67,6 +67,17 @@ class Ingredient {
 
 
     /**
+     * Whether this ingredient declares numeric constraints (min, max, integer or step).
+     *
+     * @returns {boolean}
+     */
+    hasNumericConstraints() {
+        return typeof this.min === "number" || typeof this.max === "number" ||
+            this.integer || typeof this.step === "number";
+    }
+
+
+    /**
      * Validates the given value against the constraints of this ingredient.
      *
      * @param {*} val
@@ -140,7 +151,32 @@ class Ingredient {
             }
         }
 
-        // 4. option checks
+        // 4. numeric editableOption checks, for editable presets that must hold a number (e.g. a digest size)
+        if (this.type === "editableOption" && this.hasNumericConstraints()) {
+            if (Array.isArray(checkVal)) {
+                checkVal = checkVal[this.defaultIndex ?? 0]?.value;
+            }
+            const text = typeof checkVal === "number" ? String(checkVal) : checkVal;
+            // Only plain decimal notation, so that values such as "0x100" or "2.56e2" are not silently reinterpreted
+            if (typeof text !== "string" || !/^\s*-?(\d+(\.\d*)?|\.\d+)\s*$/.test(text)) {
+                throw new OperationError(`${this.name} must be a number.`);
+            }
+            const number = Number(text);
+            if (this.integer && !/^\s*-?\d+\s*$/.test(text)) {
+                throw new OperationError(`${this.name} must be an integer.`);
+            }
+            if (typeof this.min === "number" && number < this.min) {
+                throw new OperationError(`${this.name} must be greater than or equal to ${this.min}.`);
+            }
+            if (typeof this.max === "number" && number > this.max) {
+                throw new OperationError(`${this.name} must be less than or equal to ${this.max}.`);
+            }
+            if (typeof this.step === "number" && number % this.step !== 0) {
+                throw new OperationError(`${this.name} must be a multiple of ${this.step}.`);
+            }
+        }
+
+        // 5. option checks
         if (this.type === "option") {
             if (Array.isArray(this.defaultValue)) {
                 const permittedOptions = this.defaultValue.filter(opt => {
@@ -155,7 +191,7 @@ class Ingredient {
             }
         }
 
-        // 5. argSelector checks
+        // 6. argSelector checks
         if (this.type === "argSelector") {
             if (Array.isArray(this.defaultValue)) {
                 const permittedOptions = this.defaultValue
@@ -221,7 +257,8 @@ class Ingredient {
             case "binaryShortString":
             case "editableOption":
             case "editableOptionShort":
-                return Utils.parseEscapedChars(data);
+                // Recipes can hold numbers for these (e.g. a BLAKE2b size of 256), which must be parsed as text
+                return Utils.parseEscapedChars(typeof data === "number" ? String(data) : data);
             case "byteArray":
                 if (typeof data == "string") {
                     data = data.replace(/\s+/g, "");

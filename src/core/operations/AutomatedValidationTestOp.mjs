@@ -83,6 +83,19 @@ class AutomatedValidationTestOp extends Operation {
                     }
                 ],
                 "allowEmpty": false
+            },
+            {
+                "name": "Numeric Editable Option",
+                "type": "editableOption",
+                "value": [
+                    {name: "16", value: "16"},
+                    {name: "24", value: "24"}
+                ],
+                "min": 8,
+                "max": 64,
+                "step": 8,
+                "integer": true,
+                "allowEmpty": false
             }
         ];
     }

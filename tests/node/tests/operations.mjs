@@ -980,6 +980,21 @@ smothering ampersand abreast`;
         assert.strictEqual(result.toString(), "c29tZSBpbnB1dA==");
     }),
 
+    it("editableOption: numeric constraints accept a number", () => {
+        const result = chef.automatedValidationTestOp("test", {
+            nonEmptyToggleString: { string: "test", option: "Option A" },
+            numericEditableOption: 48,
+        });
+        assert.strictEqual(result.toString(), "Success");
+    }),
+
+    it("editableOption: numeric constraints are validated", () => {
+        assert.throws(() => chef.automatedValidationTestOp("test", {
+            nonEmptyToggleString: { string: "test", option: "Option A" },
+            numericEditableOption: 12,
+        }), { message: "Numeric Editable Option must be a multiple of 8." });
+    }),
+
     it("To BCD", () => {
         assert.strictEqual(chef.toBCD("443").toString(), "0100 0100 0011");
     }),
