@@ -1021,6 +1021,16 @@ smothering ampersand abreast`;
         assert.throws(() => chef.BLAKE2b("some input", { size: 520 }), { message: "Size must be less than or equal to 512." });
     }),
 
+    it("BLAKE3: editableOption size default", () => {
+        const result = chef.BLAKE3("some input");
+        assert.strictEqual(result.toString(), "7b37000c00455abd209a9a02dd487c3e287bc6a19d4e41eb81c84b859ebf873b");
+    }),
+
+    it("BLAKE3: editableOption size as a number", () => {
+        const result = chef.BLAKE3("some input", { "Size (bytes)": 32 });
+        assert.strictEqual(result.toString(), "7b37000c00455abd209a9a02dd487c3e287bc6a19d4e41eb81c84b859ebf873b");
+    }),
+
     it("To BCD", () => {
         assert.strictEqual(chef.toBCD("443").toString(), "0100 0100 0011");
     }),

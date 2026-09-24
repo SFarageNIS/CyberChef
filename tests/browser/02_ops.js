@@ -63,6 +63,13 @@ module.exports = {
         testOp(browser, "BLAKE2b", "test input", "311e3843b5906b46893622a5389829356d32643744a5d57e8b3ccc7dd054f8ab", [256, "Hex", { "option": "UTF8", "string": "pass" }]);
         testOp(browser, "BLAKE2s", "test input", "defe73d61dfa6e5807e4f9643e159a09ccda6be3c26dcd65f8a9bb38bfc973a7", ["256", "Hex", { "option": "UTF8", "string": "pass" }]);
         testOp(browser, "BLAKE2s", "test input", "0abf30", ["24", "Hex", { "option": "UTF8", "string": "pass" }]);
+        testOp(browser, "BLAKE3", "test input", "aa4909e14f1389afc428e481ea20ffd9673604711f5afb60a747fec57e4c267c", [32, "", "Hex"]);
+        testOp(browser, "BLAKE3", "test input", "qkkJ4U8Tia/EKOSB6iD/2Wc2BHEfWvtgp0f+xX5MJnw=", [32, "", "Base64"]);
+        testOp(browser, "BLAKE3", "test input", "aa4909e14f1389afc428e481ea20ffd9", [16, ""]);
+        testOp(browser, "BLAKE3", "test input", "aa4909e14f1389afc428e481ea20ffd9673604711f5afb60a747fec57e4c267c6f", ["33", "", "Hex"]);
+        testOp(browser, "BLAKE3", "test input", "aa4909e14f1389afc428e481ea20ffd9673604711f5afb60a747fec57e4c267c");
+        testOp(browser, "BLAKE3", "test input", "42e9bf33f70e8f4819848f24f7df3718060e936ad39d3cee1000f52dd9763594", [32, { "option": "Hex", "string": "77686174732074686520456c7669736820776f726420666f7220667269656e64" }, "Hex"]);
+        testOp(browser, "BLAKE3", "test input", "42e9bf33f70e8f4819848f24f7df3718060e936ad39d3cee1000f52dd9763594", [32, "whats the Elvish word for friend", "Hex"]);
         testOp(browser, "BSON deserialise", "\u0011\u0000\u0000\u0000\u0002a\u0000\u0005\u0000\u0000\u0000test\u0000\u0000", '{\u000A  "a": "test"\u000A}');
         testOp(browser, "BSON serialise", '{"a":"test"}', "\u0011\u0000\u0000\u0000\u0002a\u0000\u0005\u0000\u0000\u0000test\u0000\u0000");
         // testOp(browser, "Bacon Cipher Decode", "test input", "test_output");

@@ -604,6 +604,12 @@ class App {
                     args[j].checked = recipeConfig[i].args[j];
                 } else if (args[j].classList.contains("toggle-string")) {
                     // toggleString
+                    if (typeof recipeConfig[i].args[j] === "string") {
+                        // Recipes saved before an argument became a toggleString hold a plain string; keep the
+                        // default toggle option rather than displaying "undefined"
+                        args[j].value = recipeConfig[i].args[j];
+                        continue;
+                    }
                     args[j].value = recipeConfig[i].args[j].string;
                     args[j].parentNode.parentNode.querySelector("button").innerHTML =
                         Utils.escapeHtml(recipeConfig[i].args[j].option);
