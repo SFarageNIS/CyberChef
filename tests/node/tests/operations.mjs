@@ -995,6 +995,32 @@ smothering ampersand abreast`;
         }), { message: "Numeric Editable Option must be a multiple of 8." });
     }),
 
+    it("BLAKE2b: editableOption size as a number", () => {
+        const result = chef.BLAKE2b("some input", { size: 256 });
+        assert.strictEqual(result.toString(), "53300bc088ab5debc42b9f3e68be419c1bb703cc2c967ed8bc0bc59b6c9d0c62");
+    }),
+
+    it("BLAKE2b: editableOption size as a string", () => {
+        const result = chef.BLAKE2b("some input", { size: "256" });
+        assert.strictEqual(result.toString(), "53300bc088ab5debc42b9f3e68be419c1bb703cc2c967ed8bc0bc59b6c9d0c62");
+    }),
+
+    it("BLAKE2b: editableOption size default", () => {
+        const result = chef.BLAKE2b("some input");
+        assert.strictEqual(result.toString(), "6bd35f974a2f0e935fa11528bf22abb5b69f9dee38edf6c25258ea3cb4ee033a7c6140d89faba60689728f612d5df7dab93da7d07ae65842ae24d01f50a22ba9");
+    }),
+
+    it("BLAKE2s: editableOption size as a number", () => {
+        const result = chef.BLAKE2s("some input", { size: 160 });
+        assert.strictEqual(result.toString(), "a4f3e577a2b8ceb20143417ed65c3d0d08cdca3e");
+    }),
+
+    it("BLAKE2b: editableOption size constraints are validated", () => {
+        assert.throws(() => chef.BLAKE2b("some input", { size: 12 }), { message: "Size must be a multiple of 8." });
+        assert.throws(() => chef.BLAKE2b("some input", { size: "0x100" }), { message: "Size must be a number." });
+        assert.throws(() => chef.BLAKE2b("some input", { size: 520 }), { message: "Size must be less than or equal to 512." });
+    }),
+
     it("To BCD", () => {
         assert.strictEqual(chef.toBCD("443").toString(), "0100 0100 0011");
     }),

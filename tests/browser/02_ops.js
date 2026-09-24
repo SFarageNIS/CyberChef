@@ -59,7 +59,10 @@ module.exports = {
             [[], [false]]
         );
         testOp(browser, "BLAKE2b", "test input", "33ebdc8f38177f3f3f334eeb117a84e11f061bbca4db6b8923e5cec85103f59f415551a5d5a933fdb6305dc7bf84671c2540b463dbfa08ee1895cfaa5bd780b5", ["512", "Hex", { "option": "UTF8", "string": "pass" }]);
+        testOp(browser, "BLAKE2b", "test input", "053178ce9cdd5f6125", ["72", "Hex", { "option": "UTF8", "string": "pass" }]);
+        testOp(browser, "BLAKE2b", "test input", "311e3843b5906b46893622a5389829356d32643744a5d57e8b3ccc7dd054f8ab", [256, "Hex", { "option": "UTF8", "string": "pass" }]);
         testOp(browser, "BLAKE2s", "test input", "defe73d61dfa6e5807e4f9643e159a09ccda6be3c26dcd65f8a9bb38bfc973a7", ["256", "Hex", { "option": "UTF8", "string": "pass" }]);
+        testOp(browser, "BLAKE2s", "test input", "0abf30", ["24", "Hex", { "option": "UTF8", "string": "pass" }]);
         testOp(browser, "BSON deserialise", "\u0011\u0000\u0000\u0000\u0002a\u0000\u0005\u0000\u0000\u0000test\u0000\u0000", '{\u000A  "a": "test"\u000A}');
         testOp(browser, "BSON serialise", '{"a":"test"}', "\u0011\u0000\u0000\u0000\u0002a\u0000\u0005\u0000\u0000\u0000test\u0000\u0000");
         // testOp(browser, "Bacon Cipher Decode", "test input", "test_output");

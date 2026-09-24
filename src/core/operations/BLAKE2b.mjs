@@ -9,6 +9,7 @@ import blakejs from "blakejs";
 import OperationError from "../errors/OperationError.mjs";
 import Utils from "../Utils.mjs";
 import { toBase64 } from "../lib/Base64.mjs";
+import { HASH_KEY_FORMATS, parseHashKey } from "../lib/HashKey.mjs";
 
 /**
  * BLAKE2b operation
@@ -25,6 +26,7 @@ class BLAKE2b extends Operation {
         this.module = "Hashing";
         this.description = `Performs BLAKE2b hashing on the input.  
         <br><br> BLAKE2b is a flavour of the BLAKE cryptographic hash function that is optimized for 64-bit platforms and produces digests of any size between 1 and 64 bytes.
+        <br><br> Size is given in bits, unlike BLAKE3 which uses bytes: it may be any multiple of 8 from 8 to 512 (e.g. 256 bits gives 32 bytes, or 64 hex characters).
         <br><br> Supports the use of an optional key.`;
         this.infoURL = "https://wikipedia.org/wiki/BLAKE_(hash_function)#BLAKE2b_algorithm";
         this.inputType = "ArrayBuffer";
@@ -32,8 +34,19 @@ class BLAKE2b extends Operation {
         this.args = [
             {
                 "name": "Size",
-                "type": "option",
-                "value": ["512", "384", "256", "160", "128"]
+                "type": "editableOption",
+                "value": [
+                    {name: "512", value: "512"},
+                    {name: "384", value: "384"},
+                    {name: "256", value: "256"},
+                    {name: "160", value: "160"},
+                    {name: "128", value: "128"}
+                ],
+                "min": 8,
+                "max": 512,
+                "step": 8,
+                "integer": true,
+                "allowEmpty": false
             }, {
                 "name": "Output Encoding",
                 "type": "option",
@@ -42,7 +55,7 @@ class BLAKE2b extends Operation {
                 "name": "Key",
                 "type": "toggleString",
                 "value": "",
-                "toggleValues": ["UTF8", "Decimal", "Base64", "Hex", "Latin1"]
+                "toggleValues": HASH_KEY_FORMATS
             }
         ];
     }
@@ -53,8 +66,12 @@ class BLAKE2b extends Operation {
      * @returns {string} The input having been hashed with BLAKE2b in the encoding format specified.
      */
     run(input, args) {
-        const [outSize, outFormat] = args;
-        let key = Utils.convertToByteArray(args[2].string || "", args[2].option);
+        // Size is validated against the argument's min, max and step before run() is called. Recipes that
+        // omit trailing arguments get the same defaults that validation checked against.
+        const [sizeInBits, outFormatArg, keyArg] = args;
+        const outSize = Number(sizeInBits ?? this.args[0].value[0].value);
+        const outFormat = outFormatArg ?? "Hex";
+        let key = parseHashKey(keyArg);
         if (key.length === 0) {
             key = null;
         } else if (key.length > 64) {
@@ -68,9 +85,9 @@ class BLAKE2b extends Operation {
             case "Base64":
                 return toBase64(blakejs.blake2b(input, key, outSize / 8));
             case "Raw":
-                return Utils.arrayBufferToStr(blakejs.blake2b(input, key, outSize / 8).buffer);
+                return Utils.byteArrayToChars(blakejs.blake2b(input, key, outSize / 8));
             default:
-                return new OperationError("Unsupported Output Type");
+                throw new OperationError("Unsupported Output Type");
         }
     }
 
